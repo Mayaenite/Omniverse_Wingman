@@ -13,7 +13,7 @@ def get_Active_Editor():
 #--------------------------------------------------------------------------------
 def get_Active_Document():
 	""""""
-	return wingapi.CAPIApplication.GetActiveDocument()
+	return wingapi.gApplication.GetActiveDocument()
 
 #--------------------------------------------------------------------------------
 def get_Active_Document_Text():

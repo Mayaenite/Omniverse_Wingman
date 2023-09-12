@@ -1,5 +1,6 @@
 
 import os
+import importlib
 import wingapi
 if not os.path.dirname(__file__) in os.sys.path:
 	os.sys.path.append(os.path.dirname(__file__))
@@ -8,6 +9,7 @@ import wing_to_omni_connections
 import DML_Utils
 import os
 import wingapi
+importlib.reload(DML_Utils)
 #--------------------------------------------------------------------------------
 def send_code_to_omniverse():
 	"""Sends The Currently Active Document Text"""
