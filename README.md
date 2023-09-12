@@ -56,5 +56,4 @@ to change how this works open out your project settings and change the envs to t
 To get this working you will edit your wing prefs and add the Wing_Scripts within the repo to our ide extension scripting search paths.
 ![Wing_Scripts](/images/wing_scripts.png)
 
-As of right now i have not published the Copilot ext because it is very buggy.
-i will get to that as soon as i can. unless you all don't care and just want to push button then i will pop it up as is.
+Copilot https://github.com/Mayaenite/mayaenite-tools-wingcopilot
