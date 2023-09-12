@@ -36,9 +36,11 @@ omni.kit.variant.editor-105.0.4
 omni.ui-2.14.30+ed961c5c.wx64.r.cp310
 
 within your app dir along with some others.
+
 it will then copy that code and build a package modual base file structure.
 ( Hopfuly :) )
 not sure if its exatly correct but so far its been a one to one
+
 ![Package_Structure](/images/Package_Modual_Version.png)
 
 
@@ -47,6 +49,7 @@ once the Project_Generator is finished you will have a wing project file in the 
 
 over time this will enabitly get out of date or you may want to run a differnt version other then the latest.
 to change how this works open out your project settings and change the envs to the version that you want to run along with where the pkg folder of where your omniverse resides.
+
 ![Extension Manager Window](/images/Envs.png)
 
 # Wingman Copilot.
