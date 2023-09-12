@@ -1,0 +1,10 @@
+#!wing
+#!version=9.0
+##################################################################
+# Wing project file                                              #
+##################################################################
+[project attributes]
+proj.file-list = [loc('Project_Generator.py'),
+                  loc('Template/Omniverse_Project.template')]
+proj.file-type = 'shared'
+proj.main-file = loc('Project_Generator.py')
