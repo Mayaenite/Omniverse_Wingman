@@ -27,7 +27,7 @@ so if you do test this out all feedback is welcome good or bad. please feel free
 # Code Compleateion How Does It Work.
 Once you have have a copy of this repo you will run the Project_Generator.py with the root level of your extension as the first arg. for example..
 
-Project_Generator.py "D:\Omni_Extensions\my-extension-supersexystuff"
+python Project_Generator.py "D:\Omni_Extensions\my-extension-supersexystuff"
 
 Project_Generator then scan your project for all the installed extension such as
 
