@@ -45,31 +45,22 @@ def clone_folder_structure(clone_location:Path,scan_location:Path):
 #-------------------------------------------------------------------------------
 def find_Wing_Project_Folder_Location(ext_project_dir:Path):
 	#-------------------------------------------------------------------------------
-	def recursive_config_scaner(folder:Path) -> Path:
-		
-		if folder.name == "config":
-			return folder.parent
-		else:
-			for child_folder in [item for item in list(folder.iterdir()) if item.is_dir()]:
-				if not child_folder.name in ["app",".vscode","tools"]:
-					return recursive_config_scaner(child_folder)
-	#-------------------------------------------------------------------------------
 	def recursive_project_name_scaner(folder:Path) -> str:
 		
 		child_folders = [ child for child in list(folder.iterdir()) if child.is_dir() ]
 		
 		for child_folder in child_folders:
-			if not child_folder.name in ["app",".vscode","tools"]:
+			if not child_folder.name in ["app",".vscode","tools",'_auto_compleate_code']:
 				if child_folder.name.count(".") >= 2:
 					result = child_folder.name
-					return result
+					return result, child_folder
 				else:
 					return recursive_project_name_scaner(child_folder)
 	
-	wing_project_folder = recursive_config_scaner(ext_project_dir)
-	wing_project_name   = recursive_project_name_scaner(ext_project_dir)
+	wing_project_name ,wing_project_folder  = recursive_project_name_scaner(ext_project_dir)
 	
 	return wing_project_folder,wing_project_name.replace(".","_")
+
 #-------------------------------------------------------------------------------
 def mod_Template_Project_To_Include_Root_Project_Dir(folder_name:str):
 	""""""
@@ -106,43 +97,48 @@ class Custom_Cleanup_Jobs:
 	def clean_Carb_Input_File_Enums(self):
 		""""""
 
-		file_to_edit = Path(self.data._output_Dir.joinpath("carb\input.pyi"))
+		files_to_edit = [Path(self.data._output_Dir.joinpath("carb\input.pyi")),
+						 Path(self.data._output_Dir.joinpath("omni\client\_omniclient.pyi"))]
+		for file_to_edit in files_to_edit:
+			if file_to_edit.exists():
+				text         = file_to_edit.read_text()
+	
+				expression   = "# value = <"
+				subst        = "= None #<"
+				result = re.sub(expression, subst, text, 0, re.MULTILINE)
 
-		if file_to_edit.exists():
-			text         = file_to_edit.read_text()
-
-			expression   = "# value = <"
-			subst        = "= None #<"
-			result = re.sub(expression, subst, text, 0, re.MULTILINE)
-
-			expression = (
-				r"    def __eq__\(self, other: object\) -> bool: ...\n"
-				r"    def __getstate__\(self\) -> int: ...\n"
-				r"    def __hash__\(self\) -> int: ...\n"
-				r"    def __index__\(self\) -> int: ...\n"
-				r"    def __init__\(self, value: int\) -> None: ...\n"
-				r"    def __int__\(self\) -> int: ...\n"
-				r"    def __ne__\(self, other: object\) -> bool: ...\n"
-				r"    def __repr__\(self\) -> str: ...\n"
-				r"    def __setstate__\(self, state: int\) -> None: ...\n"
-				r"    @property\n"
-				r"    def name\(self\) -> str:\n"
-				r"        \"\"\"\n"
-				r"        :type: str\n"
-				r"        \"\"\"\n"
-				r"    @property\n"
-				r"    def value\(self\) -> int:\n"
-				r"        \"\"\"\n"
-				r"        :type: int\n"
-				r"        \"\"\"\n")
-			subst        = ""
-			result = re.sub(expression, subst, result, 0, re.MULTILINE)
-
-			expression   = r"__members__: dict.+"
-			subst        = ""
-			result = re.sub(expression, subst, result, 0, re.MULTILINE)
-
-			file_to_edit.write_text(result)
+				expression   = "# value ="
+				subst        = "= None #"
+				result = re.sub(expression, subst, result, 0, re.MULTILINE)
+	
+				expression = (
+					r"    def __eq__\(self, other: object\) -> bool: ...\n"
+					r"    def __getstate__\(self\) -> int: ...\n"
+					r"    def __hash__\(self\) -> int: ...\n"
+					r"    def __index__\(self\) -> int: ...\n"
+					r"    def __init__\(self, value: int\) -> None: ...\n"
+					r"    def __int__\(self\) -> int: ...\n"
+					r"    def __ne__\(self, other: object\) -> bool: ...\n"
+					r"    def __repr__\(self\) -> str: ...\n"
+					r"    def __setstate__\(self, state: int\) -> None: ...\n"
+					r"    @property\n"
+					r"    def name\(self\) -> str:\n"
+					r"        \"\"\"\n"
+					r"        :type: str\n"
+					r"        \"\"\"\n"
+					r"    @property\n"
+					r"    def value\(self\) -> int:\n"
+					r"        \"\"\"\n"
+					r"        :type: int\n"
+					r"        \"\"\"\n")
+				subst        = ""
+				result = re.sub(expression, subst, result, 0, re.MULTILINE)
+	
+				expression   = r"__members__: dict.+"
+				subst        = ""
+				result = re.sub(expression, subst, result, 0, re.MULTILINE)
+	
+				file_to_edit.write_text(result)
 ########################################################################
 class Omni_Exts_To_Packs_Generator:
 	""""""
@@ -158,7 +154,7 @@ class Omni_Exts_To_Packs_Generator:
 
 		self._app_dir : Path      = self._omni_ext_dir.joinpath("app")
 
-		self._list_of_scan_dirs   = [self._app_dir.joinpath("extscache"), self._app_dir.joinpath("kit\kernel")]
+		self._list_of_scan_dirs   = [self._app_dir.joinpath("extscache"), self._app_dir.joinpath("kit\kernel"),self._app_dir.joinpath("kit\extscore\omni.client")]
 
 		self._carb_dir : Path     = self._app_dir.joinpath("kit\kernel\py\carb")
 
@@ -184,9 +180,11 @@ class Omni_Exts_To_Packs_Generator:
 		clone_folder_structure(self._output_Dir, self._carb_dir)
 
 def main():
-	ext_project_dir = Path(os.sys.argv[1])
+	#os.sys.argv.append(r"D:\Omniverse_Extensions\kit-exts-project")
+	path_to_project =  os.sys.argv[1]
+	ext_project_dir = Path(path_to_project)
 	Omni_Exts_To_Packs_Generator(ext_project_dir)
-	Build_Wing_Project_File(ext_project_dir)	
+	Build_Wing_Project_File(ext_project_dir)
 
 if __name__ == "__main__":
 	main()
