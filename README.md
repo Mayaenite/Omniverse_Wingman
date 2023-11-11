@@ -1,6 +1,10 @@
 # Omniverse_Wingman
 Generates a wing project for an Omniverse ext.
 
+In the release I have added a per built auto compleate and ziped it 
+
+if it does not work you can you can copy the templeate wing projest and the auto code and just go from there
+
 # What Can It Do
 1. Give you code compleation. Along with source assistanat
 ![Code Compleation](/images/code_compleate_source_assistant.png)
