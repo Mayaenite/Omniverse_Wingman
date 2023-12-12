@@ -19,10 +19,9 @@ if it does not work you can you can copy the templeate wing projest and the auto
 ![run apps](images/lunch_apps.png)
 
 
-### This is currenty a very (if you will) beta.
-what do i mean by that.
+### Still Need Some Tweeks.
 
-There is very little error checking and i need to flush out how it scans for ext packages.
+I need to flush out how it scans for ext packages.
 
 so if you do test this out all feedback is welcome good or bad. please feel free to prase or ridicule me.
 
